@@ -17,8 +17,6 @@ const styles = (theme) => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
-    padding: 2,
-    margin: 3.5,
   },
   container: {
     display: 'flex',
@@ -33,7 +31,7 @@ const styles = (theme) => ({
   },
   formControl: {
     margin: theme.spacing(1),
-    minWidth: 120,
+    minWidth: 121,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
@@ -42,6 +40,10 @@ const styles = (theme) => ({
   selectEmpty: {
     marginTop: theme.spacing(2),
   },
+  paxNum: {
+    marginLeft: theme.spacing(2),
+    marginRight: theme.spacing(2),
+  }
 })
 
 class InfoBlock extends React.Component {
@@ -77,30 +79,28 @@ class InfoBlock extends React.Component {
 
 
 
-          <form className={classes.root} noValidate id="dateEntryContainer">
-            <form className={classes.container} id="dateSelectors" noValidate >
-              <TextField
-                id="departure-date-selector"
-                label="Departure Date"
-                type="date"
-                defaultValue="2021-05-15"
-                className={classes.textField}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-              <TextField
-                id="arrival-date-selector"
-                label="Return Date"
-                type="date"
-                defaultValue="2021-05-17"
-                className={classes.textField}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                style={{display: this.state.isRoundTrip ? "block" : "none"}}
-              />
-            </form>
+          <form className={classes.container} id="dateSelectors" noValidate >
+            <TextField
+              id="departure-date-selector"
+              label="Departure Date"
+              type="date"
+              defaultValue="2021-05-15"
+              className={classes.textField}
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
+            <TextField
+              id="arrival-date-selector"
+              label="Return Date"
+              type="date"
+              defaultValue="2021-05-17"
+              className={classes.textField}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              style={{display: this.state.isRoundTrip ? "block" : "none"}}
+            />
           </form>
 
           <form className={classes.root} noValidate id="submitButton">
@@ -116,7 +116,7 @@ class InfoBlock extends React.Component {
             </Select>
 
             <TextField
-              className={classes.root}
+              className={classes.paxNum}
               id="numberPax"
               label="Passengers"
               type="number"
