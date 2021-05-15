@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const app = express();
 const http = require('http').Server(app);
+const fetch = require('node-fetch');
 
 app.use(express.static(path.join(__dirname, 'build')))
 
@@ -54,16 +55,90 @@ MAProuter.get("/annotationTile/:layerIndex/:z/:x/:y", function(req, res) {
 
 const FLrouter = express.Router();
 
-FLrouter.get("/search/:origin/:destination/:passengerCount", (req, res) => {
+FLrouter.get("/searchOneWay/:origin/:destination/:date/:passengerCount", (req, res) => {
 	let origin = req.params.origin;
 	let destination = req.params.destination;
-	let pC = req.params;
+	let date = req.params.date;
+	let pC = req.params.passengerCount;
+
+	let passengers = [];
+	for (let i=0; i<pC; i++) {
+		passengers.push({"type": "adult"});
+	}
 
 	let request = {
 		"data": {
-			
+			"slices": [
+				{
+					"origin": origin,
+					"destination": destination,
+					"departure_date": date
+				}
+			],
+			"passengers": passengers,
+			"cabin_class": "business"
 		}
 	}
+
+	fetch("https://api.duffel.com/air/offer_requests", {
+		method: "POST",
+		headers: {
+			"Accept-Encoding": "gzip",
+			"Accept": "application/json",
+			"Content-Type": "application/json",
+			"Duffel-Version": "beta",
+			"Authorization": "Bearer test_ARZY49Q3c1MxWjF8ryh5ItJqJAaKnFs3EHVxVK0SDEt"
+		},
+		body: JSON.stringify(request)
+	}).then(resp => resp.json()).then(resp => {
+		return res.end(JSON.stringify(resp));
+	})
+})
+
+FLrouter.get("/searchRoundtrip/:origin/:destination/:dateDeparture/:dateReturn/:passengerCount", (req, res) => {
+	let origin = req.params.origin;
+	let destination = req.params.destination;
+	let dateD = req.params.dateDeparture;
+	let dateR = req.params.dateReturn;
+	let pC = req.params.passengerCount;
+
+	let passengers = [];
+	for (let i=0; i<pC; i++) {
+		passengers.push({"type": "adult"});
+	}
+
+	let request = {
+		"data": {
+			"slices": [
+				{
+					"origin": origin,
+					"destination": destination,
+					"departure_date": dateD
+				},
+				{
+					"origin": destination,
+					"destination": origin,
+					"departure_date": dateR
+				}
+			],
+			"passengers": passengers,
+			"cabin_class": "business"
+		}
+	}
+
+	fetch("https://api.duffel.com/air/offer_requests", {
+		method: "POST",
+		headers: {
+			"Accept-Encoding": "gzip",
+			"Accept": "application/json",
+			"Content-Type": "application/json",
+			"Duffel-Version": "beta",
+			"Authorization": "Bearer test_ARZY49Q3c1MxWjF8ryh5ItJqJAaKnFs3EHVxVK0SDEt"
+		},
+		body: JSON.stringify(request)
+	}).then(resp => resp.json()).then(resp => {
+		return res.end(JSON.stringify(resp));
+	})
 })
 
 

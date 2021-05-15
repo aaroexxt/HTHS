@@ -59,6 +59,10 @@ class InfoBlock extends React.Component {
   	}
   }
 
+	actualChangeState(state) {
+		//this.props.changeState(state);
+	}
+
     render() {
       const {classes} = this.props;
 
@@ -98,7 +102,7 @@ class InfoBlock extends React.Component {
             />
           </form>
 
-          <form className={classes.root} noValidate id="submitButton">
+          <form className={classes.root} noValidate id="options1">
             <Select
               className={classes.formElement}
               labelId="isRoundTripSelector"
@@ -122,6 +126,13 @@ class InfoBlock extends React.Component {
 
           </form>
 
+		  <Button
+	        variant="contained"
+	        color="primary"
+	        onClick={this.props.changeState}
+	      >
+	        Search
+	      </Button>
         </FormControl>
 
       );
