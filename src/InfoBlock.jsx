@@ -22,27 +22,22 @@ const styles = (theme) => ({
     display: 'flex',
     flexDirection: 'column',
   },
-  textField: {
-    marginLeft: theme.spacing(2),
-    marginRight: theme.spacing(2),
-    minWidth: 200,
-    padding: 2,
-    margin: 3.5,
-  },
   formControl: {
     margin: theme.spacing(1),
-    minWidth: 121,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+
   },
   selectEmpty: {
     marginTop: theme.spacing(2),
   },
-  paxNum: {
+  formElement: {
     marginLeft: theme.spacing(2),
     marginRight: theme.spacing(2),
+    margin: 2,
+    padding: 1,
   }
 })
 
@@ -72,20 +67,20 @@ class InfoBlock extends React.Component {
           <form className={classes.root} noValidate id="queryEntryContainer" autoComplete="on">
 
 
-            <TextField id="departure-search" label="Departure" variant="outlined" className={classes.textField} />
-            <TextField id="arrival-search" label="Arrival" variant="outlined" className={classes.textField} />
+            <TextField id="departure-search" label="Departure" variant="outlined" className={classes.formElement} />
+            <TextField id="arrival-search" label="Arrival" variant="outlined" className={classes.formElement} />
 
           </form>
 
 
 
-          <form className={classes.container} id="dateSelectors" noValidate >
+          <form className={classes.root} id="dateSelectors" noValidate >
             <TextField
               id="departure-date-selector"
               label="Departure Date"
               type="date"
               defaultValue="2021-05-15"
-              className={classes.textField}
+              className={classes.formElement}
               InputLabelProps={{
                 shrink: true,
               }}
@@ -95,7 +90,7 @@ class InfoBlock extends React.Component {
               label="Return Date"
               type="date"
               defaultValue="2021-05-17"
-              className={classes.textField}
+              className={classes.formElement}
               InputLabelProps={{
                 shrink: true,
               }}
@@ -105,7 +100,7 @@ class InfoBlock extends React.Component {
 
           <form className={classes.root} noValidate id="submitButton">
             <Select
-              className={classes.root}
+              className={classes.formElement}
               labelId="isRoundTripSelector"
               id="isRoundTripSelectorID"
               value={this.state.isRoundTrip}
@@ -116,7 +111,7 @@ class InfoBlock extends React.Component {
             </Select>
 
             <TextField
-              className={classes.paxNum}
+              className={classes.formElement}
               id="numberPax"
               label="Passengers"
               type="number"
