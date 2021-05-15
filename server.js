@@ -58,6 +58,12 @@ FLrouter.get("/search/:origin/:destination/:passengerCount", (req, res) => {
 	let origin = req.params.origin;
 	let destination = req.params.destination;
 	let pC = req.params;
+
+	let request = {
+		"data": {
+			
+		}
+	}
 })
 
 
