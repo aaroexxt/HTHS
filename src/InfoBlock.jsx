@@ -17,6 +17,8 @@ const styles = (theme) => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
+    padding: 2,
+    margin: 3.5,
   },
   container: {
     display: 'flex',
@@ -103,6 +105,7 @@ class InfoBlock extends React.Component {
 
           <form className={classes.root} noValidate id="submitButton">
             <Select
+              className={classes.root}
               labelId="isRoundTripSelector"
               id="isRoundTripSelectorID"
               value={this.state.isRoundTrip}
@@ -111,6 +114,17 @@ class InfoBlock extends React.Component {
               <MenuItem value={true}>Round Trip</MenuItem>
               <MenuItem value={false}>One Way</MenuItem>
             </Select>
+
+            <TextField
+              className={classes.root}
+              id="numberPax"
+              label="Passengers"
+              type="number"
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
+
           </form>
 
         </FormControl>

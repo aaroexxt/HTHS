@@ -54,7 +54,12 @@ MAProuter.get("/annotationTile/:layerIndex/:z/:x/:y", function(req, res) {
 
 const FLrouter = express.Router();
 
-//FLrouter.get("/search/:departure/")
+FLrouter.get("/search/:origin/:destination/:passengerCount", (req, res) => {
+	let origin = req.params.origin;
+	let destination = req.params.destination;
+	let pC = req.params;
+})
+
 
 app.use("/api/map", MAProuter);
 app.use("/api/flights", FLrouter);
