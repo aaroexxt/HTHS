@@ -71,6 +71,12 @@ const currencyNameToSymbol = (name) => {
 	}
 }
 
+//TODO: this is a JANK HACK
+const sanitizeAirportCode = code => {
+	if (code.length == 4) return code.substring(1)
+	return code
+}
+
 const processFlightSearchResponse = (resp) => {
 	/*
 		Array of offer
@@ -143,8 +149,8 @@ const processFlightSearchResponse = (resp) => {
 }
 
 FLrouter.get("/searchOneway/:origin/:destination/:seatClass/:date/:passengerCount", (req, res) => {
-	let origin = req.params.origin;
-	let destination = req.params.destination;
+	let origin = sanitizeAirportCode(req.params.origin);
+	let destination = sanitizeAirportCode(req.params.destination);
 	let date = req.params.date;
 	let seatClass = req.params.seatClass;
 	let pC = req.params.passengerCount;
@@ -184,8 +190,8 @@ FLrouter.get("/searchOneway/:origin/:destination/:seatClass/:date/:passengerCoun
 })
 
 FLrouter.get("/searchRoundtrip/:origin/:destination/:seatClass/:dateDeparture/:dateReturn/:passengerCount", (req, res) => {
-	let origin = req.params.origin;
-	let destination = req.params.destination;
+	let origin = sanitizeAirportCode(req.params.origin);
+	let destination = sanitizeAirportCode(req.params.destination);
 	let dateD = req.params.dateDeparture;
 	let dateR = req.params.dateReturn;
 	let seatClass = req.params.seatClass;
