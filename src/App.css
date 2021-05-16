@@ -3,6 +3,7 @@
 .App {
 
 /* @ Calls */
+  background-color: #eeeeee;
 
 }
 
@@ -15,7 +16,7 @@
 /* MapBox */
 
 .mapBox {
-  height: 40vh;
+  height: 72vh;
 }
 
 .custom-popup .leaflet-popup-content-wrapper {
