@@ -6,6 +6,7 @@ const fetch = require('node-fetch');
 
 const cwd = __dirname;
 const RequestHandler = require("./drivers/RequestHandler.js");
+const asyncMiddleware = require("./drivers/asyncMiddleware.js");
 
 const settings = require("./data/settings.json");
 
@@ -71,10 +72,11 @@ const currencyNameToSymbol = (name) => {
 	}
 }
 
-//TODO: this is a JANK HACK
-const sanitizeAirportCode = code => {
-	if (code.length == 4) return code.substring(1)
-	return code
+//TODO: this is a JANK HACK and really shouldn't work
+const sanitizeAirportCode = async code => {
+	if (code.length == 3) return code
+	return code.substring(1)
+
 }
 
 const processFlightSearchResponse = (resp) => {
@@ -96,7 +98,6 @@ const processFlightSearchResponse = (resp) => {
 
 	let final = {};
 
-	final.seatClass = data.cabin_class;
 	final.offers = [];
 
 	for (let i=0; i<data.offers.length; i++) {
@@ -106,6 +107,7 @@ const processFlightSearchResponse = (resp) => {
 		finOffer.airline = offer.owner.name;
 		finOffer.cost = currencyNameToSymbol(offer.total_currency)+offer.total_amount;
 		finOffer.emissions = offer.total_emissions_kg;
+		finOffer.seatClass = data.cabin_class;
 		finOffer.legs = [];
 
 		for (let j=0; j<offer.slices.length; j++) {
@@ -148,9 +150,9 @@ const processFlightSearchResponse = (resp) => {
 	return final;
 }
 
-FLrouter.get("/searchOneway/:origin/:destination/:seatClass/:date/:passengerCount", (req, res) => {
-	let origin = sanitizeAirportCode(req.params.origin);
-	let destination = sanitizeAirportCode(req.params.destination);
+FLrouter.get("/searchOneway/:origin/:destination/:seatClass/:date/:passengerCount", asyncMiddleware(async (req, res, next) => {
+	let origin = await sanitizeAirportCode(req.params.origin);
+	let destination = await sanitizeAirportCode(req.params.destination);
 	let date = req.params.date;
 	let seatClass = req.params.seatClass;
 	let pC = req.params.passengerCount;
@@ -187,11 +189,11 @@ FLrouter.get("/searchOneway/:origin/:destination/:seatClass/:date/:passengerCoun
 	}).then(resp => resp.json()).then(resp => {
 		return res.end(JSON.stringify(processFlightSearchResponse(resp)));
 	})
-})
+}));
 
-FLrouter.get("/searchRoundtrip/:origin/:destination/:seatClass/:dateDeparture/:dateReturn/:passengerCount", (req, res) => {
-	let origin = sanitizeAirportCode(req.params.origin);
-	let destination = sanitizeAirportCode(req.params.destination);
+FLrouter.get("/searchRoundtrip/:origin/:destination/:seatClass/:dateDeparture/:dateReturn/:passengerCount", asyncMiddleware(async (req, res, next) => {
+	let origin = await sanitizeAirportCode(req.params.origin);
+	let destination = await sanitizeAirportCode(req.params.destination);
 	let dateD = req.params.dateDeparture;
 	let dateR = req.params.dateReturn;
 	let seatClass = req.params.seatClass;
@@ -234,7 +236,7 @@ FLrouter.get("/searchRoundtrip/:origin/:destination/:seatClass/:dateDeparture/:d
 	}).then(resp => resp.json()).then(resp => {
 		return res.end(JSON.stringify(processFlightSearchResponse(resp)));
 	})
-})
+}))
 
 app.use("/api/map", MAProuter);
 app.use("/api/flights", FLrouter);
