@@ -16,3 +16,24 @@ B, the user can click on the search bar at the top right and enter a query. The 
 We believe that users will be able to make more knowledgable, risk-concious decisions utilizing our platform for travel. We plan to continue developing to launch with live data on the web. 
 
 Thank you for your consideration, and have a great day!
+
+```
+Input Types for A:
+  Departure/Arrival Airports: ICAO Code, IATA Code ie "KDAB" or "MCO"
+  Trip Selector: Round Trip or One Way, which influences Departure and Return Date fields
+  Departure/Return Date: Calendar selected date in mm/dd/yyyy format
+  Cabin Class: dropdown selection
+  Passgners: Integer
+  
+Input Types for B: 
+Search field: ICAO Code, IATA Code, Airport Name Query, City/Area Query
+```
+
+## Roadmap
+1. Switch to Live Data
+2. Improve Search Recognition
+3. Autofill for Queries and Fields
+4. Mobile Support
+5. Swift Application
+
+
