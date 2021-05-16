@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const {ratcliffObershelp} = require("./stringCompare.js");
+const {ratcliffObershelp, levenshtein} = require("./stringCompare.js");
 
 const airports = JSON.parse(fs.readFileSync(path.join(process.cwd(), "/data/airports.json")));
 
@@ -41,13 +41,20 @@ const airportSearch = text => {
 		}
 
 		let matchP = Math.max(
-			(ap.name == "") ? 0 : ratcliffObershelp(ap.name, text),
+			(ap.name == "") ? 0 : levenshtein(ap.name, text)*2,
 			(ap.city == "") ? 0 : ratcliffObershelp(ap.city, text),
 		);
+
 		if (matchP > cutoff && matchP > bestMatch[1]) {
 			found = true;
 			bestMatch[0] = ap;
 			bestMatch[1] = matchP;
+
+			console.log(ap.name, matchP, ratcliffObershelp(ap.city, text), ratcliffObershelp(ap.name, text))
+		}
+
+		if (ap.name.indexOf("Heathrow") > -1) {
+			console.log(ap.name, matchP, ratcliffObershelp(ap.city, text), ratcliffObershelp(ap.name, text))
 		}
 	}
 	if (!found) return false;
