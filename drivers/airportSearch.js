@@ -40,7 +40,9 @@ const airportSearch = text => {
 			return ap;
 		}
 
-		let matchP = ((ap.name == "") ? 0 : ratcliffObershelp(ap.name, text)*2 + (ap.city == "") ? 0 : ratcliffObershelp(ap.city, text))/2;
+		let matchP = (ap.name == "") ? 0 : ratcliffObershelp(ap.name, text);
+		matchP += (ap.city == "") ? 0 : ratcliffObershelp(ap.city, text)*1.5;
+		matchP/=2;
 
 		if (matchP > cutoff && matchP > bestMatch[1]) {
 			found = true;
