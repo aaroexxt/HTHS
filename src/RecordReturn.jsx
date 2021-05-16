@@ -241,10 +241,10 @@ function DisplayCard(props) {
                 <Typography gutterBottom>Covid Risk: {arrLeg.risk.covidRisk}</Typography>
                 <PrettoSlider className={classes.root} valueLabelDisplay="auto" aria-label="pretto slider" defaultValue={arrLeg.risk.covidRisk} disabled/>
               <div className={classes.marginSlider} />
-                <Typography gutterBottom>Homicide: {arrLeg.risk.homicide} Index</Typography>
+                <Typography gutterBottom>Homicide Index: {arrLeg.risk.homicide}</Typography>
                 <PrettoSlider className={classes.root} valueLabelDisplay="auto" aria-label="pretto slider" defaultValue={arrLeg.risk.homicide} disabled/>
               <div className={classes.marginSlider} />
-                <Typography gutterBottom>Corruption: {arrLeg.risk.corruption} Index</Typography>
+                <Typography gutterBottom>Corruption Index: {arrLeg.risk.corruption}</Typography>
                 <PrettoSlider className={classes.root} valueLabelDisplay="auto" aria-label="pretto slider" defaultValue={arrLeg.risk.corruption} disabled/>
             </div>
 

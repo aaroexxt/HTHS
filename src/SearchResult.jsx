@@ -33,7 +33,6 @@ class SearchResult extends React.Component {
 		super();
 	}
 
-
 	render() {
 		const {classes} = this.props;
 		let result = this.props.result;
@@ -57,14 +56,14 @@ class SearchResult extends React.Component {
 				<h1>COVID, Security, and Analysis</h1>
 					<div class={classes.verticalSection}>
 						<div className={classes.marginSlider} />
-							<Typography gutterBottom>Covid Risk</Typography>
-							<PrettoSlider className={classes.root} valueLabelDisplay="auto" aria-label="pretto slider" defaultValue={20} disabled/>
+							<Typography gutterBottom>Covid Risk: {result.risk.covidRisk}</Typography>
+							<PrettoSlider className={classes.root} valueLabelDisplay="auto" aria-label="pretto slider" defaultValue={result.risk.covidRisk} disabled/>
 						<div className={classes.marginSlider} />
-							<Typography gutterBottom>Homicide Index</Typography>
-							<PrettoSlider className={classes.root} valueLabelDisplay="auto" aria-label="pretto slider" defaultValue={20} disabled/>
+							<Typography gutterBottom>Homicide Index: {result.risk.homicide}</Typography>
+							<PrettoSlider className={classes.root} valueLabelDisplay="auto" aria-label="pretto slider" defaultValue={result.risk.homicide} disabled/>
 						<div className={classes.marginSlider} />
-							<Typography gutterBottom>Corruption Index</Typography>
-							<PrettoSlider className={classes.root} valueLabelDisplay="auto" aria-label="pretto slider" defaultValue={20} disabled/>
+							<Typography gutterBottom>Corruption Index: {result.risk.corruption}</Typography>
+							<PrettoSlider className={classes.root} valueLabelDisplay="auto" aria-label="pretto slider" defaultValue={result.risk.corruption} disabled/>
 					</div>
 				</div>
 

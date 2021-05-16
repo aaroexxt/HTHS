@@ -7,7 +7,40 @@ import NavHeader from "./NavHeader.jsx";
 import InfoBlock from "./InfoBlock.jsx";
 import RecordReturn from "./RecordReturn.jsx";
 import SearchResult from "./SearchResult.jsx";
+import MainMap from "./MainMap.jsx"
 import mutateState from "./mutateState.jsx";
+
+Number.prototype.toRad = function() {
+   return this * Math.PI / 180;
+}
+
+const midPoint = (lat1,lon1,lat2,lon2) => {
+	function toRadians(degress) {
+    return degress * (Math.PI / 180);
+  }
+
+  function toDegrees(radians) {
+    return (radians * (180 / Math.PI));
+  }
+
+  const lngDiff = toRadians(lon2 - lon1);
+  const latA = toRadians(lat1);
+  const latB = toRadians(lat2);
+  const lngA = toRadians(lon1);
+
+  const bx = Math.cos(latB) * Math.cos(lngDiff);
+  const by = Math.cos(latB) * Math.sin(lngDiff);
+
+  const latMidway = toDegrees(
+    Math.atan2(
+      Math.sin(latA) + Math.sin(latB),
+      Math.sqrt((Math.cos(latA) + bx) * (Math.cos(latA) + bx) + by * by)
+    )
+  );
+  const lngMidway = toDegrees(lngA + Math.atan2(by, Math.cos(latA) + bx));
+
+  return [latMidway, lngMidway];
+}
 
 export default class App extends React.Component {
 	constructor() {
@@ -30,7 +63,11 @@ export default class App extends React.Component {
 			},
 
 			searchInfo: "",
-			searchResponseInfo: {}
+			searchResponseInfo: {},
+
+			mapMarkers: [[37.77, -122.4312]],
+			mapPosition: [37.77, -122.4312],
+			mapZoom: 8
 		}
 	}
 
@@ -53,6 +90,24 @@ export default class App extends React.Component {
 
     fetch(urlString).then(resp => resp.json()).then(resp => {
       this.state.flightResponseInfo = resp;
+
+	  var offer = resp.offers[0];
+	  let isRoundTrip = offer.isRoundTrip;
+
+	  let depLeg, arrLeg;
+	  if (isRoundTrip) {
+	    depLeg = offer.legs[0].departureAirport;
+	    arrLeg = offer.legs[0].arrivalAirport;
+	  } else {
+	    depLeg = offer.legs[0].departureAirport;
+	    arrLeg = offer.legs[offer.legs.length - 1].arrivalAirport;
+	  }
+
+	  let mp = midPoint(depLeg.lat, depLeg.lon, arrLeg.lat, arrLeg.lon);
+	  this.state.mapPosition = [mp[0], mp[1]];
+	  this.state.mapMarkers = [[depLeg.lat, depLeg.lon], [arrLeg.lat, arrLeg.lon]];
+	  this.state.mapZoom = 4;
+
       this.setState(this.state);
       this.handleStateChange(2);
     })
@@ -63,8 +118,16 @@ export default class App extends React.Component {
 
 	  fetch(urlString).then(resp => resp.json()).then(resp => {
         this.state.searchResponseInfo = resp;
-		this.setState(this.state);
-        this.handleStateChange(4);
+		this.state.mapPosition = [resp.lat, resp.lon];
+  	  	this.state.mapMarkers = [[resp.lat, resp.lon]];
+		this.state.mapZoom = 11;
+
+		urlString = 'http://' + window.location.host + '/api/risk/airport/' + resp.icao;
+		fetch(urlString).then(respR => respR.json()).then(respRisk => {
+			this.state.searchResponseInfo.risk = respRisk;
+			this.setState(this.state);
+	        this.handleStateChange(4);
+		});
       })
   }
 
@@ -119,15 +182,15 @@ export default class App extends React.Component {
 				break;
 		}
 
-	  return <div className="App">
+	  return (<div className="App">
 		  <NavHeader
 		  	handleSearch={s => {this.handleSearchInfo(s)}}
 			changeState={() => {
 				this.handleStateChange(3);
 			}}
 			/>
-		  <div className="mapBox" id="map" />
+		<MainMap markers={this.state.mapMarkers} position={this.state.mapPosition} zoom={this.state.mapZoom} />
 		  {content}
-	  </div>;
+	  </div>);
   }
 }
