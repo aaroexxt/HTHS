@@ -8,6 +8,8 @@ const cwd = __dirname;
 const RequestHandler = require("./drivers/RequestHandler.js");
 const asyncMiddleware = require("./drivers/asyncMiddleware.js");
 
+const {ICAOtoIATA, IATAtoICAO} = require("./drivers/airportSearch.js");
+
 const settings = require("./data/settings.json");
 
 app.use(express.static(path.join(__dirname, 'build')))
@@ -73,9 +75,14 @@ const currencyNameToSymbol = (name) => {
 }
 
 //TODO: this is a JANK HACK and really shouldn't work
-const sanitizeAirportCode = async code => {
+const sanitizeAirportCode = code => {
 	if (code.length == 3) return code
-	return code.substring(1)
+	let parsedAirport = ICAOtoIATA(code);
+	if (parsedAirport == null || typeof parsedAirport == "undefined") {
+		return code;
+	} else {
+		return parsedAirport;
+	}
 
 }
 
@@ -151,8 +158,8 @@ const processFlightSearchResponse = (resp) => {
 }
 
 FLrouter.get("/searchOneway/:origin/:destination/:seatClass/:date/:passengerCount", asyncMiddleware(async (req, res, next) => {
-	let origin = await sanitizeAirportCode(req.params.origin);
-	let destination = await sanitizeAirportCode(req.params.destination);
+	let origin = sanitizeAirportCode(req.params.origin);
+	let destination = sanitizeAirportCode(req.params.destination);
 	let date = req.params.date;
 	let seatClass = req.params.seatClass;
 	let pC = req.params.passengerCount;
@@ -192,8 +199,8 @@ FLrouter.get("/searchOneway/:origin/:destination/:seatClass/:date/:passengerCoun
 }));
 
 FLrouter.get("/searchRoundtrip/:origin/:destination/:seatClass/:dateDeparture/:dateReturn/:passengerCount", asyncMiddleware(async (req, res, next) => {
-	let origin = await sanitizeAirportCode(req.params.origin);
-	let destination = await sanitizeAirportCode(req.params.destination);
+	let origin = sanitizeAirportCode(req.params.origin);
+	let destination = sanitizeAirportCode(req.params.destination);
 	let dateD = req.params.dateDeparture;
 	let dateR = req.params.dateReturn;
 	let seatClass = req.params.seatClass;
