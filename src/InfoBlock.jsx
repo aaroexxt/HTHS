@@ -38,6 +38,9 @@ const styles = (theme) => ({
     marginRight: theme.spacing(2),
     margin: 2,
     padding: 1,
+    width: 250,
+    minHeight: 40,
+
   }
 })
 
@@ -46,7 +49,8 @@ class InfoBlock extends React.Component {
     super();
 
     this.state = {
-      isRoundTrip: true
+      isRoundTrip: true,
+      classSelection: 'economy'
     }
   }
 
@@ -57,6 +61,31 @@ class InfoBlock extends React.Component {
   	} else {
   		mutateState(this, {isRoundTrip: false})
   	}
+  }
+
+  handleDepartureDate(e) {
+    this.props.changeInformation("departureDate", e.target.value)
+  }
+
+  handleReturnDate(e) {
+    this.props.changeInformation("returnDate", e.target.value)
+  }
+
+  handleClassChange(e) {
+    mutateState(this, {classSelection: e.target.value})
+    this.props.changeInformation("classSelection", e.target.value)
+  }
+
+  handleAirportDeparture(e) {
+    this.props.changeInformation("departureAirport", e.target.value)
+  }
+
+  handleAirportArrival(e) {
+    this.props.changeInformation("arrivalAirport", e.target.value)
+  }
+
+  handlePassengerNum(e) {
+    this.props.changeInformation("passengerNum", e.target.value)
   }
 
 	actualChangeState(state) {
@@ -71,8 +100,8 @@ class InfoBlock extends React.Component {
           <form className={classes.root} noValidate id="queryEntryContainer" autoComplete="on">
 
 
-            <TextField id="departure-search" label="Departure" variant="outlined" className={classes.formElement} />
-            <TextField id="arrival-search" label="Arrival" variant="outlined" className={classes.formElement} />
+            <TextField id="departure-search" onChange={(e) => {this.handleAirportDeparture(e)}} label="Departure" variant="outlined" className={classes.formElement} />
+            <TextField id="arrival-search" onChange={(e) => {this.handleAirportArrival(e)}} label="Arrival" variant="outlined" className={classes.formElement} />
 
           </form>
 
@@ -83,17 +112,19 @@ class InfoBlock extends React.Component {
               id="departure-date-selector"
               label="Departure Date"
               type="date"
-              defaultValue="2021-05-15"
+              defaultValue={new Date().toLocaleDateString()}
+              onChange={(e) => {this.handleDepartureDate(e)}}
               className={classes.formElement}
               InputLabelProps={{
                 shrink: true,
               }}
             />
             <TextField
-              id="arrival-date-selector"
+              id="return-date-selector"
               label="Return Date"
               type="date"
-              defaultValue="2021-05-17"
+              defaultValue={new Date().toLocaleDateString()}
+              onChange={(e) => {this.handleReturnDate(e)}}
               className={classes.formElement}
               InputLabelProps={{
                 shrink: true,
@@ -118,7 +149,9 @@ class InfoBlock extends React.Component {
               className={classes.formElement}
               id="numberPax"
               label="Passengers"
+              defaultValue={1}
               type="number"
+              onChange={(e) => {this.handlePassengerNum(e)}}
               InputLabelProps={{
                 shrink: true,
               }}
@@ -126,13 +159,31 @@ class InfoBlock extends React.Component {
 
           </form>
 
-		  <Button
-	        variant="contained"
-	        color="primary"
-	        onClick={this.props.changeState}
-	      >
-	        Search
-	      </Button>
+          <form className={classes.root} noValidate id="options2">
+      		  <Button
+                className={classes.formElement}
+      	        variant="contained"
+      	        color="primary"
+                label="Service Class"
+      	        onClick={this.props.changeState}
+      	      >
+      	        Search
+      	      </Button>
+
+              <Select
+                className={classes.formElement}
+                labelId="classSelectionDropdown"
+                id="classSelection"
+                value={this.state.classSelection}
+                onChange={(e) => {this.handleClassChange(e)}}
+              >
+                <MenuItem value={'first'}>First</MenuItem>
+                <MenuItem value={'business'}>Business</MenuItem>
+                <MenuItem value={'premium_economy'}>Premium Economy</MenuItem>
+                <MenuItem value={'economy'}>Economy</MenuItem>
+              </Select>
+            </form>
+
         </FormControl>
 
       );
