@@ -58,8 +58,10 @@ class InfoBlock extends React.Component {
   handleOneWayPivot(e) {
   	if (e.target.value) {
   		mutateState(this, {isRoundTrip: true})
+		this.props.changeInformation("isRoundTrip", true)
   	} else {
   		mutateState(this, {isRoundTrip: false})
+		this.props.changeInformation("isRoundTrip", false)
   	}
   }
 

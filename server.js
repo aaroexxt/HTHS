@@ -151,7 +151,6 @@ const processFlightSearchResponse = (resp, roundTrip) => {
 			}
 
 			let segment = slice.segments[0];
-
 			leg.distance = Math.ceil(Number(segment.distance));
 			let depFormat = dateFormat(segment.departing_at);
 			let arrFormat = dateFormat(segment.arriving_at);
@@ -161,7 +160,6 @@ const processFlightSearchResponse = (resp, roundTrip) => {
 				departureDate: depFormat.date,
 				arrivalTime: arrFormat.time,
 				arrivalDate: arrFormat.date
-
 			}
 			leg.planeType = segment.aircraft.name;
 			leg.flightNumber = segment.operating_carrier_flight_number;

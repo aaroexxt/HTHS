@@ -22,6 +22,7 @@ class RecordReturn extends React.Component {
     let content = [];
     for (let x = 0; x < this.props.jsonData.offers.length; x++) {
       let offer = this.props.jsonData.offers[x];
+	  console.log(offer)
       content.push(<DisplayCard
         offer={offer} />)
 
@@ -109,7 +110,6 @@ const useStyles = makeStyles((theme) => ({
 
 function DisplayCard(props) {
   var offer = props.offer;
-  console.log(offer)
 
   const classes = useStyles();
   return (
