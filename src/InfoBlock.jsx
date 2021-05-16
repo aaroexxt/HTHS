@@ -40,7 +40,7 @@ const styles = (theme) => ({
     padding: 1,
     width: 250,
     minHeight: 40,
-
+    display: 'flex !important',
   }
 })
 

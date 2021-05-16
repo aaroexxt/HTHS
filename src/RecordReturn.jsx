@@ -233,7 +233,7 @@ function DisplayCard(props) {
               aria-controls="panel1a-content"
               id="panel1a-header"
             >
-              <Typography className={classes.heading}>COVID, Safety, and Quality Analysis</Typography>
+              <Typography className={classes.heading}>Health, Environment, and Safety Report</Typography>
             </AccordionSummary>
             <AccordionDetails>
             <div class={classes.verticalSection}>
@@ -246,7 +246,11 @@ function DisplayCard(props) {
               <div className={classes.marginSlider} />
                 <Typography gutterBottom>Corruption Index: {arrLeg.risk.corruption}</Typography>
                 <PrettoSlider className={classes.root} valueLabelDisplay="auto" aria-label="pretto slider" defaultValue={arrLeg.risk.corruption} disabled/>
-            </div>
+              <div className={classes.marginSlider} />
+                <Typography gutterBottom>CO2: {offer.emissions} kg </Typography>
+                <PrettoSlider className={classes.root} valueLabelDisplay="auto" aria-label="pretto slider" defaultValue={offer.emissions/10} disabled/>
+
+          </div>
 
             </AccordionDetails>
           </Accordion>
@@ -316,7 +320,7 @@ function LegCard(props) {
         <div className={classes.flightLeg}>
           <div className={classes.flights}>
             <p><strong>{leg.times.departureTime}</strong> | {leg.departureAirport.name} ({leg.departureAirport.iata})<br/><br/> <strong>{leg.times.arrivalTime}</strong> | {leg.arrivalAirport.name} ({leg.arrivalAirport.iata}) </p>
-
+            <p><em>Departure Date: </em>{leg.times.departureDate}</p>
 
           </div>
         </div>
