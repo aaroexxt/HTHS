@@ -20,7 +20,7 @@ export default class App extends React.Component {
 				arrivalAirport: 'KATL',
 				departureDate: '05-18-2021',
 				returnDate: '5-21-2021',
-				isRoundTrip: false,
+				isRoundTrip: true,
 				passengerNum: 1,
 				classSelection: 'economy'
 			},
@@ -39,10 +39,8 @@ export default class App extends React.Component {
 	}
 
   handleInputInformation(param, value) {
-	  if (value != "") {
-		this.state.flightSearchInfo[param] = value;
-		this.setState(this.state);
-	}
+	this.state.flightSearchInfo[param] = value;
+	this.setState(this.state);
   }
 
   flightSearch() {
