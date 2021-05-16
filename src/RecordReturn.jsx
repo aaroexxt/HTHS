@@ -181,11 +181,11 @@ function LegCard(props) {
         <h3>Leg #{props.legIndex}</h3>
         <div className={classes.departureFlightLeg}>
           <div className={classes.flights}>
-            <p>{leg.departureAirport.name} ({leg.departureAirport.iata})    |    <strong>{leg.times.departure}</strong></p>
+            <p>{leg.departureAirport.name} ({leg.departureAirport.iata})    |    <strong>{leg.times.departureTime}</strong></p>
           </div>
         </div>
         <div className={classes.arrivalFlightLeg}>
-          <p>{leg.arrivalAirport.name} ({leg.departureAirport.iata})    |    <strong>{leg.times.arrival}</strong> </p>
+          <p>{leg.arrivalAirport.name} ({leg.departureAirport.iata})    |    <strong>{leg.times.arrivalTime}</strong> </p>
         </div>
         <div className={classes.flightsLegData}>
           <p>Flight {leg.flightNumber} | Distance: {leg.distance} mi</p>
