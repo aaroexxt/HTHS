@@ -109,6 +109,7 @@ const useStyles = makeStyles((theme) => ({
 
 function DisplayCard(props) {
   var offer = props.offer;
+  console.log(offer)
 
   const classes = useStyles();
   return (
@@ -174,7 +175,6 @@ function DisplayCard(props) {
 function LegCard(props) {
   let leg = props.leg;
   const classes = useStyles();
-  console.log(leg)
   return (
     <div className={classes.legOrg}>
       <div className={classes.legDisplay}>

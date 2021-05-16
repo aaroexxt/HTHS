@@ -18,8 +18,8 @@ export default class App extends React.Component {
 			flightSearchInfo: {
 				departureAirport: 'KDAB',
 				arrivalAirport: 'KATL',
-				departureDate: '05-17-2021',
-				returnDate: '5-19-2021',
+				departureDate: '05-18-2021',
+				returnDate: '5-21-2021',
 				isRoundTrip: false,
 				passengerNum: 1,
 				classSelection: 'economy'

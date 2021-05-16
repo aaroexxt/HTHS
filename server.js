@@ -153,8 +153,8 @@ const processFlightSearchResponse = (resp, roundTrip) => {
 			let segment = slice.segments[0];
 
 			leg.distance = Math.ceil(Number(segment.distance));
-			const depFormat = dateFormat(segment.departing_at);
-			const arrFormat = dateFormat(segment.arriving_at);
+			let depFormat = dateFormat(segment.departing_at);
+			let arrFormat = dateFormat(segment.arriving_at);
 			leg.times = {
 				total: slice.duration.substring(2).toLowerCase().split("h").join("h "),
 				departureTime: depFormat.time,
