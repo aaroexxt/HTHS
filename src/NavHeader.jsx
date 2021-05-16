@@ -75,6 +75,15 @@ class NavHeader extends React.Component {
 		super();
 	}
 
+	handleKeyUp(e) {
+		if (e.keyCode == 13) {
+			e.target.value = "";
+			this.props.changeState();
+		} else {
+			this.props.handleSearch(e.target.value);
+		}
+	}
+
 	render() {
 		const {classes} = this.props;
 
@@ -82,7 +91,6 @@ class NavHeader extends React.Component {
       <div className={classes.root}>
         <AppBar position="static">
           <Toolbar>
-            
             <Typography className={classes.title} variant="h6" noWrap>
               InformedTraveler™️
             </Typography>
@@ -97,6 +105,7 @@ class NavHeader extends React.Component {
                   input: classes.inputInput,
                 }}
                 inputProps={{ 'aria-label': 'search' }}
+				onKeyUp={(e) => {this.handleKeyUp(e)}}
               />
             </div>
           </Toolbar>

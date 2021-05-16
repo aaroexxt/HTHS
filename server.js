@@ -8,7 +8,7 @@ const cwd = __dirname;
 const RequestHandler = require("./drivers/RequestHandler.js");
 const asyncMiddleware = require("./drivers/asyncMiddleware.js");
 
-const {ICAOtoIATA, IATAtoICAO} = require("./drivers/airportSearch.js");
+const {ICAOtoIATA, IATAtoICAO, airportSearch} = require("./drivers/airportSearch.js");
 
 const settings = require("./data/settings.json");
 
@@ -86,7 +86,20 @@ const sanitizeAirportCode = code => {
 
 }
 
-const processFlightSearchResponse = (resp) => {
+const dateFormat = dateStr => {
+	let d = new Date(dateStr);
+
+	var hours = d.getHours();
+	var minutes = d.getMinutes();
+	var ampm = hours >= 12 ? 'pm' : 'am';
+	hours = hours % 12;
+	hours = hours ? hours : 12; // the hour '0' should be '12'
+	minutes = minutes < 10 ? '0'+minutes : minutes;
+	var strTime = hours + ':' + minutes + ' ' + ampm;
+	return {time: strTime.toUpperCase(), date: d.toLocaleString().split(',')[0]}
+}
+
+const processFlightSearchResponse = (resp, roundTrip) => {
 	/*
 		Array of offer
 
@@ -112,6 +125,7 @@ const processFlightSearchResponse = (resp) => {
 
 		let finOffer = {};
 		finOffer.airline = offer.owner.name;
+		finOffer.isRoundTrip = roundTrip;
 		finOffer.cost = currencyNameToSymbol(offer.total_currency)+offer.total_amount;
 		finOffer.emissions = offer.total_emissions_kg;
 		finOffer.seatClass = data.cabin_class;
@@ -139,10 +153,15 @@ const processFlightSearchResponse = (resp) => {
 			let segment = slice.segments[0];
 
 			leg.distance = segment.distance;
+			const depFormat = dateFormat(segment.departing_at);
+			const arrFormat = dateFormat(segment.arriving_at);
 			leg.times = {
 				total: slice.duration.substring(2).toLowerCase().split("h").join("h "),
-				departure: segment.departing_at,
-				arrival: segment.arriving_at
+				departureTime: depFormat.time,
+				departureDate: depFormat.date,
+				arrivalTime: arrFormat.time,
+				arrivalDate: arrFormat.date
+
 			}
 			leg.planeType = segment.aircraft.name;
 			leg.flightNumber = segment.operating_carrier_flight_number;
@@ -194,7 +213,7 @@ FLrouter.get("/searchOneway/:origin/:destination/:seatClass/:date/:passengerCoun
 		},
 		body: JSON.stringify(request)
 	}).then(resp => resp.json()).then(resp => {
-		return res.end(JSON.stringify(processFlightSearchResponse(resp)));
+		return res.end(JSON.stringify(processFlightSearchResponse(resp, false)));
 	})
 }));
 
@@ -241,12 +260,22 @@ FLrouter.get("/searchRoundtrip/:origin/:destination/:seatClass/:dateDeparture/:d
 		},
 		body: JSON.stringify(request)
 	}).then(resp => resp.json()).then(resp => {
-		return res.end(JSON.stringify(processFlightSearchResponse(resp)));
+		return res.end(JSON.stringify(processFlightSearchResponse(resp, true)));
 	})
 }))
 
 app.use("/api/map", MAProuter);
 app.use("/api/flights", FLrouter);
+app.get("/api/search/:text", (req, res) => {
+	let search = airportSearch(req.params.text);
+
+	if (search != null) {
+		res.status(200);
+		res.end(JSON.stringify(search));
+	} else {
+		res.end("Nothing found");
+	}
+})
 app.use("/status", (req, res) => {
 	return res.end("OK");
 })
