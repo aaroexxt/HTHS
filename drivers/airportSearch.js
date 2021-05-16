@@ -49,12 +49,6 @@ const airportSearch = text => {
 			found = true;
 			bestMatch[0] = ap;
 			bestMatch[1] = matchP;
-
-			console.log(ap.name, matchP, ratcliffObershelp(ap.city, text), ratcliffObershelp(ap.name, text))
-		}
-
-		if (ap.name.indexOf("Heathrow") > -1) {
-			console.log(ap.name, matchP, ratcliffObershelp(ap.city, text), ratcliffObershelp(ap.name, text))
 		}
 	}
 	if (!found) return false;
