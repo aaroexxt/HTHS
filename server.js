@@ -4,10 +4,12 @@ const app = express();
 const http = require('http').Server(app);
 const fetch = require('node-fetch');
 
-app.use(express.static(path.join(__dirname, 'build')))
-
 const cwd = __dirname;
-const RequestHandler = require("./drivers/RequestHandler.js")
+const RequestHandler = require("./drivers/RequestHandler.js");
+
+const settings = require("./data/settings.json");
+
+app.use(express.static(path.join(__dirname, 'build')))
 
 let mapReady = false;
 const mapUtils = require('./drivers/mapUtils.js');
@@ -55,10 +57,96 @@ MAProuter.get("/annotationTile/:layerIndex/:z/:x/:y", function(req, res) {
 
 const FLrouter = express.Router();
 
-FLrouter.get("/searchOneWay/:origin/:destination/:date/:passengerCount", (req, res) => {
+const currencyNameToSymbol = (name) => {
+	switch (name) {
+		case "USD":
+			return "$";
+			break;
+		case "GBP":
+			return "£";
+			break;
+		default: // unknown, just default
+			return name;
+			break;
+	}
+}
+
+const processFlightSearchResponse = (resp) => {
+	/*
+		Array of offer
+
+		Each offer:
+		DONE - Departure/arrival airport
+		DONE - date & time of depart and arrive for each leg (and it's layover time)
+		DONE - total time
+		DONE - emissions
+		DONE - cost
+		DONE - airline
+		DONE - class
+		DONE - aircraft type
+		- flight number
+	 */
+	let data = resp.data;
+
+	let final = {};
+
+	final.seatClass = data.cabin_class;
+	final.offers = [];
+
+	for (let i=0; i<data.offers.length; i++) {
+		let offer = data.offers[i];
+
+		let finOffer = {};
+		finOffer.airline = offer.owner.name;
+		finOffer.cost = currencyNameToSymbol(offer.total_currency)+offer.total_amount;
+		finOffer.emissions = offer.total_emissions_kg;
+		finOffer.legs = [];
+
+		for (let j=0; j<offer.slices.length; j++) {
+			let slice = offer.slices[j];
+
+			let leg = {};
+			leg.departureAirport = {
+				name: slice.origin.name,
+				iata: slice.origin.iata_code,
+				icao: slice.origin.icao_code,
+				lat: slice.origin.latitude,
+				lon: slice.origin.longitude
+			}
+			leg.arrivalAirport = {
+				name: slice.destination.name,
+				iata: slice.destination.iata_code,
+				icao: slice.destination.icao_code,
+				lat: slice.destination.latitude,
+				lon: slice.destination.longitude
+			}
+
+			let segment = slice.segments[0];
+
+			leg.distance = segment.distance;
+			leg.times = {
+				total: slice.duration.substring(2).toLowerCase().split("h").join("h "),
+				departure: segment.departing_at,
+				arrival: segment.arriving_at
+			}
+			leg.planeType = segment.aircraft.name;
+			leg.flightNumber = segment.operating_carrier_flight_number;
+
+			finOffer.legs.push(leg);
+		}
+
+		final.offers.push(finOffer);
+
+	}
+
+	return final;
+}
+
+FLrouter.get("/searchOneway/:origin/:destination/:seatClass/:date/:passengerCount", (req, res) => {
 	let origin = req.params.origin;
 	let destination = req.params.destination;
 	let date = req.params.date;
+	let seatClass = req.params.seatClass;
 	let pC = req.params.passengerCount;
 
 	let passengers = [];
@@ -76,7 +164,7 @@ FLrouter.get("/searchOneWay/:origin/:destination/:date/:passengerCount", (req, r
 				}
 			],
 			"passengers": passengers,
-			"cabin_class": "business"
+			"cabin_class": seatClass
 		}
 	}
 
@@ -87,19 +175,20 @@ FLrouter.get("/searchOneWay/:origin/:destination/:date/:passengerCount", (req, r
 			"Accept": "application/json",
 			"Content-Type": "application/json",
 			"Duffel-Version": "beta",
-			"Authorization": "Bearer test_ARZY49Q3c1MxWjF8ryh5ItJqJAaKnFs3EHVxVK0SDEt"
+			"Authorization": "Bearer "+settings.duffelToken
 		},
 		body: JSON.stringify(request)
 	}).then(resp => resp.json()).then(resp => {
-		return res.end(JSON.stringify(resp));
+		return res.end(JSON.stringify(processFlightSearchResponse(resp)));
 	})
 })
 
-FLrouter.get("/searchRoundtrip/:origin/:destination/:dateDeparture/:dateReturn/:passengerCount", (req, res) => {
+FLrouter.get("/searchRoundtrip/:origin/:destination/:seatClass/:dateDeparture/:dateReturn/:passengerCount", (req, res) => {
 	let origin = req.params.origin;
 	let destination = req.params.destination;
 	let dateD = req.params.dateDeparture;
 	let dateR = req.params.dateReturn;
+	let seatClass = req.params.seatClass;
 	let pC = req.params.passengerCount;
 
 	let passengers = [];
@@ -122,7 +211,7 @@ FLrouter.get("/searchRoundtrip/:origin/:destination/:dateDeparture/:dateReturn/:
 				}
 			],
 			"passengers": passengers,
-			"cabin_class": "business"
+			"cabin_class": seatClass
 		}
 	}
 
@@ -133,17 +222,19 @@ FLrouter.get("/searchRoundtrip/:origin/:destination/:dateDeparture/:dateReturn/:
 			"Accept": "application/json",
 			"Content-Type": "application/json",
 			"Duffel-Version": "beta",
-			"Authorization": "Bearer test_ARZY49Q3c1MxWjF8ryh5ItJqJAaKnFs3EHVxVK0SDEt"
+			"Authorization": "Bearer "+settings.duffelToken
 		},
 		body: JSON.stringify(request)
 	}).then(resp => resp.json()).then(resp => {
-		return res.end(JSON.stringify(resp));
+		return res.end(JSON.stringify(processFlightSearchResponse(resp)));
 	})
 })
 
-
 app.use("/api/map", MAProuter);
 app.use("/api/flights", FLrouter);
+app.use("/status", (req, res) => {
+	return res.end("OK");
+})
 
 /*
 API preference
