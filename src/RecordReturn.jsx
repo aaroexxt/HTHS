@@ -236,13 +236,13 @@ function DisplayCard(props) {
             <AccordionDetails>
             <div class={classes.verticalSection}>
               <div className={classes.marginSlider} />
-                <Typography gutterBottom>Covid Risk</Typography>
-                <PrettoSlider className={classes.root} valueLabelDisplay="auto" aria-label="pretto slider" defaultValue={arrLeg.risk.covid} disabled/>
+                <Typography gutterBottom>Covid Risk: {arrLeg.risk.covidrisk}</Typography>
+                <PrettoSlider className={classes.root} valueLabelDisplay="auto" aria-label="pretto slider" defaultValue={arrLeg.risk.covidrisk} disabled/>
               <div className={classes.marginSlider} />
-                <Typography gutterBottom>Homicide Index</Typography>
+                <Typography gutterBottom>Homicide: {arrLeg.risk.homicide} Index</Typography>
                 <PrettoSlider className={classes.root} valueLabelDisplay="auto" aria-label="pretto slider" defaultValue={arrLeg.risk.homicide} disabled/>
               <div className={classes.marginSlider} />
-                <Typography gutterBottom>Corruption Index</Typography>
+                <Typography gutterBottom>Corruption: {arrLeg.risk.corruption} Index</Typography>
                 <PrettoSlider className={classes.root} valueLabelDisplay="auto" aria-label="pretto slider" defaultValue={arrLeg.risk.corruption} disabled/>
             </div>
 
