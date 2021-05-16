@@ -140,19 +140,22 @@ const processFlightSearchResponse = (resp, roundTrip) => {
 			let slice = offer.slices[j];
 
 			let leg = {};
+
 			leg.departureAirport = {
 				name: slice.origin.name,
 				iata: slice.origin.iata_code,
 				icao: slice.origin.icao_code,
 				lat: slice.origin.latitude,
-				lon: slice.origin.longitude
+				lon: slice.origin.longitude,
+				risk: airportRiskCache(slice.origin.icao_code)
 			}
 			leg.arrivalAirport = {
 				name: slice.destination.name,
 				iata: slice.destination.iata_code,
 				icao: slice.destination.icao_code,
 				lat: slice.destination.latitude,
-				lon: slice.destination.longitude
+				lon: slice.destination.longitude,
+				risk: airportRiskCache(slice.destination.icao_code)
 			}
 
 			let segment = slice.segments[0];
@@ -423,6 +426,47 @@ app.get("/api/risk/:country/:city/:state", (req, res) => {
 		corruption: corruptionRisk,
 		covidRisk: covidRisk
 	}));
+})
+
+var airportCache = [];
+const airportRiskCache = icao => {
+	let hitCache = false;
+	for (let i=0; i<airportCache.length; i++) {
+		if (airportCache[i][0] == icao) {
+			hitCache = true;
+			console.log("hit")
+			return airportCache[i][1];
+		}
+	}
+	console.log("noHit")
+	if (!hitCache) {
+		let risk = airportRisk(icao);
+		airportCache.push([icao, risk]);
+		return risk;
+	}
+}
+const airportRisk = icao => {
+	let search = airportSearch(icao);
+
+	if (search != null) {
+		let city = search.city || "";
+		let state = search.subd || "";
+		let country = search.country || "";
+
+		let homicideRisk = homicideDataReady ? getHomicideData(country) : 100;
+		let corruptionRisk = corruptionDataReady ? getCorruptionData(country) : 100;
+		let covidRisk = covidDataReady ? getCovidData(country, city, state)/1000 : 100;
+
+		return JSON.stringify({
+			homicide: homicideRisk,
+			corruption: corruptionRisk,
+			covidRisk: covidRisk
+		});
+	}
+}
+
+app.get("/api/risk/airport/:icao", (req, res) => {
+	return res.end(airportRiskCache(sanitizeAirportCode(req.params.icao)))
 })
 
 app.use("/api/map", MAProuter);
