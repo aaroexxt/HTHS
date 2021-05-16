@@ -1,70 +1,39 @@
-# Getting Started with Create React App
+# InformedTravel Multiuse Application
+HTHS Hacks.2021() Project Submission
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Authors: 
+Aaron Becker // Grayson Bertaina 
 
-## Available Scripts
+## Purpose:
+InformedTraveler is a web application written completely in ReactJS with MaterialUI. It was designed to answer a simple need - an air travel planning system that helps users account for various forms of risk and environmental impact. We categorized the risk into four indicies - Covid Risk, Homicide Index, Corruption Index, and CO2 Index. 
 
-In the project directory, you can run:
+On the home screen, users have two primary ways of interacting with the system. 
 
-### `npm start`
+A, the user can fill out the fields at the bottom center of the application. The required entries are arrival airport code, departure airport code, trip type, relevant dates, and their selected cabin class. After hitting search, a list of flights will be returned (sample data for today) from the origin to the destination. On the quick summary view, information like price, CO2 emissions, and two drop downs are present. The first, "Detailed Flight Information," breaks the flight down into legs. The detailed pane includes flight number, departure time, aircraft type, time enroute, distance, and departure date. Under the second dropdown, information related to risk is available. The Covid, Homicide, and Corruption scores are calculated on a 100 point scale from recent data. 
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+B, the user can click on the search bar at the top right and enter a query. The closest match area and airport will be displayed with a map pinpoint and the same four risk/consideration statistics. This tool can be used to research any city or area in the world without the requirement of a trip or flight. The system will return the three key risk factors: COVID status, homicide index, and corruption index.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+We believe that users will be able to make more knowledgable, risk-concious decisions utilizing our platform for travel. We plan to continue developing to launch with live data on the web. 
 
-### `npm test`
+Thank you for your consideration, and have a great day!
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```
+Input Types for A:
+  Departure/Arrival Airports: ICAO Code, IATA Code ie "KDAB" or "MCO"
+  Trip Selector: Round Trip or One Way, which influences Departure and Return Date fields
+  Departure/Return Date: Calendar selected date in mm/dd/yyyy format
+  Cabin Class: dropdown selection
+  Passgners: Integer
+  
+Input Types for B: 
+Search field: ICAO Code, IATA Code, Airport Name Query, City/Area Query
+```
 
-### `npm run build`
+## Roadmap
+1. Switch to Live Data
+2. Improve Search Recognition
+3. Autofill for Queries and Fields
+4. Mobile Support
+5. Swift Application
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
