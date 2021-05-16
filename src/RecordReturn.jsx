@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles, makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 
 const styles = (theme) => ({
@@ -10,29 +10,56 @@ const styles = (theme) => ({
 class RecordReturn extends React.Component {
   constructor() {
     super();
+
   }
 
-  generateRecords() {
-    let records = this.props.records;
+  getAllInfo() {
     let content = [];
-    for (let i=0; i<records.length; i++) {
-    content.push(<h1>{records[i].name}</h1>);
+    for (let x = 0; x < this.props.jsonData.offers.length; x++) {
+      let offer = this.props.jsonData.offers[x];
+      content.push(<DisplayCard
+        offer={offer} />)
+
+
     }
     return content;
   }
 
-  getRecords() {
-    
-  }
+
 
   render() {
     return (
-    <div>
-      <p>All the records</p>
-        {this.generateRecords()}
+      <div>
+        <div>
+          {this.getAllInfo()}
+        </div>
+
       </div>
     );
   }
+}
+
+// {offer.airline}
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    '& > *': {
+      margin: theme.spacing(1),
+    },
+  },
+  // classes
+}));
+
+
+
+function DisplayCard(props) {
+  let offer = props.offer;
+  const classes = useStyles();
+  return (
+    <div class="card-display">
+
+    </div>
+  );
 }
 
 RecordReturn.propTypes = {

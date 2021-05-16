@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import NavHeader from "./NavHeader.jsx";
 import InfoBlock from "./InfoBlock.jsx";
 import RecordReturn from "./RecordReturn.jsx";
+import mutateState from "./mutateState.jsx";
 
 export default class App extends React.Component {
 	constructor() {
@@ -21,7 +22,11 @@ export default class App extends React.Component {
         isRoundTrip: false,
         passengerNum: 1,
         classSelection: 'economy'
-  		}
+  		},
+
+      responseInfo: {
+        // ded
+      }
     }
 	}
 
@@ -44,7 +49,9 @@ export default class App extends React.Component {
     }
 
     fetch(urlString).then(resp => resp.json()).then(resp => {
-      console.log(resp);
+      this.state.responseInfo = resp;
+      this.setState(this.state);
+      this.handleStateChange(2);
     })
   }
 
@@ -64,10 +71,16 @@ export default class App extends React.Component {
         this.APISearch();
           break;
       case 2:
+      console.log(this.state.responseInfo)
         content.push(<RecordReturn
           changeState={()=> {
             this.handleStateChange(0)
-          }} />);
+          }}
+          jsonData = {
+            this.state.responseInfo
+          }
+          />);
+          break;
 			default:
 				content = (<h1>Uhoh state undefined</h1>)
 		}
