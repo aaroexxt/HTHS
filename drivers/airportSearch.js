@@ -41,7 +41,7 @@ const airportSearch = text => {
 		}
 
 		let matchP = Math.max(
-			(ap.name == "") ? 0 : levenshtein(ap.name, text)*2,
+			(ap.name == "") ? 0 : ratcliffObershelp(ap.name, text)*2,
 			(ap.city == "") ? 0 : ratcliffObershelp(ap.city, text),
 		);
 
