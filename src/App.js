@@ -84,7 +84,12 @@ export default class App extends React.Component {
             />);
 				break;
 			case 1:
-				content.push(<h1>Searching...</h1>);
+				content.push(
+
+          <div style={{textAlign: 'center'}}>
+            <h1>Searching...</h1>
+          </div>
+        );
 				this.flightSearch();
 				break;
 			case 2:

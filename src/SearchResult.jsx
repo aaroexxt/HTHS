@@ -31,7 +31,7 @@ class SearchResult extends React.Component {
 					<div className={classes.innerSearch}>
 						<h1>Search Result</h1>
 						<h2>Closest Airport: {result.name} ({result.icao})</h2>
-						<h2>Location: {result.city + ',' + result.subd+ ", "+result.country}</h2>
+						<h2>Location: {result.city + ', ' + result.subd+ ", "+result.country}</h2>
 					</div>
 					<div>
 						<Button variant="contained" color="primary" onClick={this.props.changeState}>Back To Search</Button>

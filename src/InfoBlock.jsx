@@ -98,7 +98,7 @@ class InfoBlock extends React.Component {
       const {classes} = this.props;
 
       return (
-        <FormControl className={classes.formControl} >
+        <div className={classes.formControl} >
           <form className={classes.root} noValidate id="queryEntryContainer" autoComplete="on">
 
 
@@ -186,7 +186,7 @@ class InfoBlock extends React.Component {
               </Select>
             </form>
 
-        </FormControl>
+        </div>
 
       );
     }

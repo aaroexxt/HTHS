@@ -1,9 +1,9 @@
 /* Global */
 
-.App {
+body {
 
 /* @ Calls */
-  background-color: #eeeeee;
+  background-color: #fcfcfc;
 
 }
 
@@ -48,6 +48,11 @@
 .App-link {
   color: #61dafb;
 }
+
+.marginSlider {
+  background-color: blue !important;
+}
+
 
 @keyframes App-logo-spin {
   from {
