@@ -147,7 +147,7 @@ const processFlightSearchResponse = (resp, roundTrip) => {
 				icao: slice.origin.icao_code,
 				lat: slice.origin.latitude,
 				lon: slice.origin.longitude,
-				risk: airportRiskCache(slice.origin.icao_code)
+				risk: JSON.parse(airportRiskCache(slice.origin.icao_code))
 			}
 			leg.arrivalAirport = {
 				name: slice.destination.name,
@@ -155,7 +155,7 @@ const processFlightSearchResponse = (resp, roundTrip) => {
 				icao: slice.destination.icao_code,
 				lat: slice.destination.latitude,
 				lon: slice.destination.longitude,
-				risk: airportRiskCache(slice.destination.icao_code)
+				risk: JSON.parse(airportRiskCache(slice.destination.icao_code))
 			}
 
 			let segment = slice.segments[0];
@@ -412,6 +412,13 @@ const getCovidData = (country, city, state) => {
 	}
 }
 
+const clamp = (num, min, max) => {
+	num = Number(num);
+	if (num > max) return max;
+	if (num < min) return min;
+	return num;
+}
+
 app.get("/api/risk/:country/:city/:state", (req, res) => {
 	let city = req.params.city || "";
 	let state = req.params.state || "";
@@ -422,9 +429,9 @@ app.get("/api/risk/:country/:city/:state", (req, res) => {
 	let covidRisk = covidDataReady ? getCovidData(country, city, state)/1000 : 100;
 
 	return res.end(JSON.stringify({
-		homicide: homicideRisk,
-		corruption: corruptionRisk,
-		covidRisk: covidRisk
+		homicide: clamp(homicideRisk, 0, 100),
+		corruption: clamp(corruptionRisk, 0, 100),
+		covidRisk: clamp(covidRisk, 0, 100)
 	}));
 })
 
@@ -434,11 +441,9 @@ const airportRiskCache = icao => {
 	for (let i=0; i<airportCache.length; i++) {
 		if (airportCache[i][0] == icao) {
 			hitCache = true;
-			console.log("hit")
 			return airportCache[i][1];
 		}
 	}
-	console.log("noHit")
 	if (!hitCache) {
 		let risk = airportRisk(icao);
 		airportCache.push([icao, risk]);
@@ -458,9 +463,9 @@ const airportRisk = icao => {
 		let covidRisk = covidDataReady ? getCovidData(country, city, state)/1000 : 100;
 
 		return JSON.stringify({
-			homicide: homicideRisk,
-			corruption: corruptionRisk,
-			covidRisk: covidRisk
+			homicide: clamp(homicideRisk, 0, 100),
+			corruption: clamp(corruptionRisk, 0, 100),
+			covidRisk: clamp(covidRisk, 0, 100)
 		});
 	}
 }

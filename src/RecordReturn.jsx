@@ -183,6 +183,8 @@ function DisplayCard(props) {
     arrLeg = offer.legs[offer.legs.length - 1].arrivalAirport;
   }
 
+  console.log(arrLeg.risk)
+
   const classes = useStyles();
   return (
 
@@ -237,7 +239,7 @@ function DisplayCard(props) {
             <div class={classes.verticalSection}>
               <div className={classes.marginSlider} />
                 <Typography gutterBottom>Covid Risk</Typography>
-                <PrettoSlider className={classes.root} valueLabelDisplay="auto" aria-label="pretto slider" defaultValue={arrLeg.risk.covid} disabled/>
+                <PrettoSlider className={classes.root} valueLabelDisplay="auto" aria-label="pretto slider" defaultValue={arrLeg.risk.covidRisk} disabled/>
               <div className={classes.marginSlider} />
                 <Typography gutterBottom>Homicide Index</Typography>
                 <PrettoSlider className={classes.root} valueLabelDisplay="auto" aria-label="pretto slider" defaultValue={arrLeg.risk.homicide} disabled/>
