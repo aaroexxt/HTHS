@@ -13,13 +13,13 @@ A, the user can fill out the fields at the bottom center of the application. The
 
 B, the user can click on the search bar at the top right and enter a query. The closest match area and airport will be displayed with a map pinpoint and the same four risk/consideration statistics. This tool can be used to research any city or area in the world without the requirement of a trip or flight. The system will return the three key risk factors: COVID status, homicide index, and corruption index.
 
-We believe that users will be able to make more knowledgable, risk-concious decisions utilizing our platform for travel. We plan to continue developing to launch with live data on the web.
+We believe that users will be able to make more knowledgable, risk-conscious decisions utilizing our platform for travel. We plan to continue developing to launch with live data on the web.
 
 Thank you for your consideration, and have a great day!
 
 ## Screenshots
 
-#### Front UI that's visible at beignning
+#### Front UI that's visible at beginning
 ![frontUI](screenshots/frontUI.png)
 
 #### View of several legs of a selected trip through the custom frontend
