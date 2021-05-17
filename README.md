@@ -1,4 +1,4 @@
-# InformedTravel Multiuse Application
+# InformedTraveler Multiuse Application
 HTHS Hacks.2021() Project Submission
 
 ## Authors:
@@ -48,3 +48,14 @@ Search field: ICAO Code, IATA Code, Airport Name Query, City/Area Query
 3. Autofill for Queries and Fields
 4. Mobile Support
 5. Swift Application
+
+
+### Fixes and Future Todos
+- Port code to swift for better mobile experience
+- More robust backend search APIs
+- More data to draw from!
+- "Composite index" taking into account all data available in area
+- Color coded map
+- Fix one way not hiding additional info bug
+- True flight data API
+- Sorting flights based on parameters/weighting how much you worry about each (for example, can make covid risk be a high factor in search and crime be low or vice versa)
