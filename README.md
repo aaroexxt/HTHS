@@ -17,6 +17,10 @@ We believe that users will be able to make more knowledgable, risk-conscious dec
 
 Thank you for your consideration, and have a great day!
 
+## Demo
+
+[Link to demo on YouTube](https://www.youtube.com/watch?v=LzFqSHbzxKM)
+
 ## Screenshots
 
 #### Front UI that's visible at beginning
